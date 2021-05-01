@@ -16,29 +16,92 @@ const collateralReservesQ = `{
   }
 }`;
 
+/* const allReservesQ = `{
+ *   reserves {
+ *     id
+ *     name
+ *     price {
+ *       id
+ *     }
+ *     liquidityRate
+ *     variableBorrowRate
+ *     stableBorrowRate
+ *   }
+ * }`; */
+
 const allReservesQ = `{
   reserves {
     id
+    underlyingAsset
     name
-    price {
+    symbol
+    decimals
+    isActive
+    isFrozen
+    usageAsCollateralEnabled
+    borrowingEnabled
+    stableBorrowRateEnabled
+    baseLTVasCollateral
+    optimalUtilisationRate
+    averageStableRate
+    stableRateSlope1
+    stableRateSlope2
+    baseVariableBorrowRate
+    variableRateSlope1
+    variableRateSlope2
+    variableBorrowIndex
+    variableBorrowRate
+    totalScaledVariableDebt
+    liquidityIndex
+    reserveLiquidationThreshold
+    aToken {
       id
     }
-    liquidityRate
-    variableBorrowRate
+    vToken {
+      id
+    }
+    sToken {
+      id
+    }
+    availableLiquidity
     stableBorrowRate
+    liquidityRate
+    totalPrincipalStableDebt
+    totalLiquidity
+    utilizationRate
+    reserveLiquidationBonus
+    price {
+      priceInEth
+    }
+    lastUpdateTimestamp
+    stableDebtLastUpdateTimestamp
+    reserveFactor
   }
 }`;
 
 const userReservesQ = (address) => `{
   userReserves(where: { user: "${address.toLowerCase()}"}) {
-    id
-    reserve{
+    scaledATokenBalance
+    reserve {
       id
+      underlyingAsset
+      name
       symbol
+      decimals
+      liquidityRate
+      reserveLiquidationBonus
+      lastUpdateTimestamp
+      aToken {
+        id
+      }
     }
-    user {
-      id
-    }
+    usageAsCollateralEnabledOnUser
+    stableBorrowRate
+    stableBorrowLastUpdateTimestamp
+    principalStableDebt
+    scaledVariableDebt
+    variableBorrowIndex
+    lastUpdateTimestamp
   }
 }`;
 
@@ -63,6 +126,7 @@ class AaveService {
       .then((response) => {
         if (this.verbose) {
           console.log(`getReserves raw response:\n${JSON.stringify(response, null, 2)}`);
+          fs.writeFileSync('reserves.json', JSON.stringify(response.reserves, null, 2));
         }
         return response.reserves;
       });
@@ -73,6 +137,7 @@ class AaveService {
       .then((response) => {
         if (this.verbose) {
           console.log(`getUserReserves raw response:\n${JSON.stringify(response, null, 2)}`);
+          fs.writeFileSync('userReserves.json', JSON.stringify(response.userReserves, null, 2));
         }
         return response.userReserves;
       });
