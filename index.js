@@ -70,7 +70,7 @@ async function getBalanceCommand (args) {
     if (ifttt) {
       console.log('Sending to IFTTT');
       const channel = new IFTTT(ifttt);
-      channel.post('aave_health_alert', { value1: healthFactor, value2: warn });
+      channel.post('aave_health_alert', [trimDec(healthFactor), warn] );
     }
   }
 }
@@ -80,12 +80,8 @@ function balanceOptions (yargs) {
   const defaultIFTTT = process.env.AAVE_IFTTT || '';
   
   return yargs
-    .option('address', {
-      alias: 'a',
-      type: 'string',
-      describe: `Account address (default "${defaultAccount}")`,
-      default: defaultAccount
-    })
+    .option('address',
+            { alias: 'a', type: 'string', describe: 'Account address', default: defaultAccount })
     .option('matic',
             { alias: 'm', type: 'boolean', default: true })
     .option('decimals',
