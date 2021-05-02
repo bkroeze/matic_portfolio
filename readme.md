@@ -22,6 +22,8 @@ I set my notification to be ""{{EventName}}" was "{{Value1}}" with threshold = "
 
 That way, I get a message on my phone if the alert goes off, via the IFTTT app installed on it.
 
+The key you need is found by clicking "documentation" on the applets page.  I never would have found it without searching.  Weird.
+
 Examples
 --------
 
