@@ -3049,6 +3049,13 @@ ieee754@^1.1.13:
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
 
+ifttt-webhooks-channel@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/ifttt-webhooks-channel/-/ifttt-webhooks-channel-1.1.5.tgz#858197af7f3246b626fe0b1187d116e156d04c6f"
+  integrity sha512-Qr3wIMihNMTwJsPdY2+LWv8VdkcIbPEVq6D8D918GHfBkYyjcQZ26sIV3Z6VilbOmmMPyyEpN8t2zoUmQDJ8tw==
+  dependencies:
+    node-fetch "^2.6.0"
+
 ignore-by-default@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ignore-by-default/-/ignore-by-default-2.0.0.tgz#537092018540640459569fe7c8c7a408af581146"
@@ -4015,7 +4022,7 @@ node-addon-api@^2.0.0:
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-2.0.2.tgz#432cfa82962ce494b132e9d72a15b29f71ff5d32"
   integrity sha512-Ntyt4AIXyaLIuMHF6IOoTakB3K+RWxwtsHNRxllEoA6vPwP9o4866g6YWDLUdnucilZhmkxiHwHr11gAENw+QA==
 
-node-fetch@2.6.1:
+node-fetch@2.6.1, node-fetch@^2.6.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==

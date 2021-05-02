@@ -1,3 +1,4 @@
+const IFTTT = require('ifttt-webhooks-channel')
 const formatDate = require('date-fns/format');
 const yargs = require('yargs');
 const Table = require('cli-table');
@@ -27,7 +28,8 @@ async function getBalanceCommand (args) {
     format,
     verbose,
     usd,
-    warn
+    warn,
+    ifttt
   } = args;
 
   if (!address) {
@@ -65,11 +67,18 @@ async function getBalanceCommand (args) {
   }
   if (warn && healthFactor < warn) {
     console.log('WARNING, health below threshold!');
+    if (ifttt) {
+      console.log('Sending to IFTTT');
+      const channel = new IFTTT(ifttt);
+      channel.post('aave_health_alert', { value1: healthFactor, value2: warn });
+    }
   }
 }
 
 function balanceOptions (yargs) {
   const defaultAccount = process.env.AAVE_ACCOUNT || '';
+  const defaultIFTTT = process.env.AAVE_IFTTT || '';
+  
   return yargs
     .option('address', {
       alias: 'a',
@@ -77,12 +86,20 @@ function balanceOptions (yargs) {
       describe: `Account address (default "${defaultAccount}")`,
       default: defaultAccount
     })
-    .option('matic', { alias: 'm', type: 'boolean', default: true })
-    .option('decimals', { type: 'number', desc: 'number of decimals to display for totals', default: 4})
-    .option('format', { type: 'string', desc: 'json,table', default: 'table' })
-    .option('usd', { type: 'boolean', desc: 'show values in USD? (otherwise ETH)', default: true })
-    .option('warn', { type: 'number', desc: 'Warn at Health threshold under (default: off)', default: 0})
-    .option('verbose', { alias: 'v', type: 'boolean', default: false });
+    .option('matic',
+            { alias: 'm', type: 'boolean', default: true })
+    .option('decimals',
+            { type: 'number', desc: 'number of decimals to display for totals', default: 4})
+    .option('format',
+            { type: 'string', desc: 'json,table', default: 'table' })
+    .option('usd',
+            { type: 'boolean', desc: 'show values in USD? (otherwise ETH)', default: true })
+    .option('ifttt',
+            { type: 'string', desc: 'IFTTT Key, if a warning should trigger an IFTTT action', default: defaultIFTTT})
+    .option('warn',
+            { type: 'number', desc: 'Warn at Health threshold under (default: off)', default: 0})
+    .option('verbose',
+            { alias: 'v', type: 'boolean', default: false });
 }
 
 yargs
