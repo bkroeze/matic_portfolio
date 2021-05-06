@@ -128,11 +128,12 @@ async function getRatesCommand (args) {
       decimals,
       matic,
       format,
-      verbose
+      verbose,
+      hours
     } = args;
 
   const Aave = new AaveService(matic, verbose);
-  const rates = await Aave.getFormattedRates(Date.now(), days);
+  const rates = await Aave.getFormattedRates(Date.now(), days, hours);
 
   switch (format) {
     case 'table': {
@@ -172,7 +173,9 @@ async function getRatesCommand (args) {
           records.push(toCSVRow(timestamp, coinRate));
         });
       });
-      console.log(csv.getHeaderString().slice(0,-1));
+      if (!args.noheader) {
+        console.log(csv.getHeaderString().slice(0,-1));
+      }
       console.log(csv.stringifyRecords(records));        
       break;
     }
@@ -186,8 +189,12 @@ function rateOptions (yargs) {
   return baseOptions(yargs
     .option('days',
             { type: 'number', describe: 'How many days of data to retrieve', default: 30 })
-        .option('format',
-                { type: 'string', desc: 'json,table,csv', default: 'table' }));
+    .option('hours',
+            { type: 'boolean', describe: 'Get hours instead of days', default: false })
+    .option('noheader',
+            { type: 'boolean', describe: 'do not output header', default: false })
+    .option('format',
+            { type: 'string', desc: 'json,table,csv', default: 'table' }));
 
   /* .option('coin',
    *         { type: 'string', describe: 'Asset name in Aave', default: 'weth' })); */
