@@ -11,6 +11,7 @@
     "@aave/protocol-js": "^2.7.2",
     "bluebird": "^3.7.2",
     "cli-table": "^0.3.6",
+    "csv-writer": "^1.6.0",
     "date-fns": "^2.21.1",
     "ethers": "^5.1.4",
     "graphql": "^15.5.0",

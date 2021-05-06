@@ -3,6 +3,8 @@ const { evolve } = require('ramda');
 const formatDate = require('date-fns/format');
 const yargs = require('yargs');
 const Table = require('cli-table');
+const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
+
 const { AaveService } = require('./lib/services/AaveService');
 
 const YMDDate = (dt) => {
@@ -139,10 +141,9 @@ async function getRatesCommand (args) {
       });
       
       Object.keys(rates).forEach((timestamp) => {
-        const dateLabel =  YMDDate(timestamp);
         rates[timestamp].forEach((coinRate) => {
           table.push([
-            dateLabel,
+            timestamp,
             coinRate.symbol,
             trimDec(coinRate.liquidityRate, decimals),
             trimDec(coinRate.variableBorrowRate, decimals)
@@ -154,7 +155,25 @@ async function getRatesCommand (args) {
       break;
     }
     case 'csv': {
+      const csv = createCsvStringifier({
+        header: ['timestamp', 'symbol', 'liquidityRate', 'variableBorrowRate'].map(x => ({ id: x, title: x }))
+      })
       
+      const toCSVRow = (timestamp, row) => ({
+        timestamp,
+        symbol: row.symbol,
+        liquidityRate: trimDec(row.liquidityRate, decimals),
+        variableBorrowRate: trimDec(row.variableBorrowRate, decimals)
+      });
+      
+      const records = [];
+      Object.keys(rates).forEach((timestamp) => {
+        rates[timestamp].forEach((coinRate) => {          
+          records.push(toCSVRow(timestamp, coinRate));
+        });
+      });
+      console.log(csv.getHeaderString().slice(0,-1));
+      console.log(csv.stringifyRecords(records));        
       break;
     }
     default: {
