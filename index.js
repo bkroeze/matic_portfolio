@@ -124,14 +124,17 @@ function balanceOptions (yargs) {
 async function getRatesCommand (args) {
     const {
       // coin,
-      days,
+      // days,
+      // hours,
       decimals,
       matic,
       format,
       verbose,
-      hours
     } = args;
 
+  // until I fix the history query
+  const days = 1;
+  const hours = false;
   const Aave = new AaveService(matic, verbose);
   const rates = await Aave.getFormattedRates(Date.now(), days, hours);
 
@@ -176,7 +179,7 @@ async function getRatesCommand (args) {
       if (!args.noheader) {
         console.log(csv.getHeaderString().slice(0,-1));
       }
-      console.log(csv.stringifyRecords(records));        
+      console.log(csv.stringifyRecords(records).slice(0,-1));
       break;
     }
     default: {
@@ -187,10 +190,10 @@ async function getRatesCommand (args) {
 
 function rateOptions (yargs) {
   return baseOptions(yargs
-    .option('days',
-            { type: 'number', describe: 'How many days of data to retrieve', default: 30 })
-    .option('hours',
-            { type: 'boolean', describe: 'Get hours instead of days', default: false })
+    /* .option('days',
+     *         { type: 'number', describe: 'How many days of data to retrieve', default: 30 })
+     * .option('hours',
+     *         { type: 'boolean', describe: 'Get hours instead of days', default: false }) */
     .option('noheader',
             { type: 'boolean', describe: 'do not output header', default: false })
     .option('format',
