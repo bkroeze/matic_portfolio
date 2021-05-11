@@ -8,7 +8,7 @@ const { AaveService } = require('./lib/services/AaveService');
 
 const YMDDate = (dt) => {
   try {
-    return formatDate(dt, 'yyyy-MMM-dd HH:MM');
+    return formatDate(dt, 'yyyy-MMM-dd HH:mm');
   } catch (e) {
     console.error(e);
     return dt;
