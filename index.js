@@ -104,8 +104,7 @@ async function getBalanceCommand (args) {
       console.log(table.toString());
       break;
     }
-    case
-    'csv': {
+    case 'csv': {
       const csv = createCsvStringifier({
         header: ['timestamp', 'symbol', 'liquidity', 'collateral', 'borrows', 'LTVMax', 'LTV', 'health'].map(x => ({ id: x, title: x }))
       });
@@ -120,6 +119,22 @@ async function getBalanceCommand (args) {
         console.log(csv.getHeaderString().slice(0, -1));
       }
       console.log(csv.stringifyRecords(records).slice(0, -1));
+      break;
+    }
+    case 'org': {
+      console.log(`* AAVE ${YMDDate(Date.now())}`);
+      if (usd) {
+        console.log(`  - Liquidity USD: ${trimDec(balance.totalLiquidityUSD, decimals)}
+  - Collateral USD: ${trimDec(balance.totalCollateralUSD, decimals)}
+  - Borrows USD: ${trimDec(balance.totalBorrowsUSD, decimals)}`);
+      }
+      if (eth) {
+        console.log(`  - Liquidity ETH: ${trimDec(balance.totalLiquidityETH, decimals)}
+  - Collateral ETH: ${trimDec(balance.totalCollateralETH, decimals)}
+  - Borrows ETH: ${trimDec(balance.totalBorrowsETH, decimals)}`);
+      }
+      console.log(`  - LTV: ${trimDec(ltv + '', decimals)}
+  - Health: ${trimDec(healthFactor, decimals)}`);
       break;
     }
     default: {
@@ -147,7 +162,7 @@ function balanceOptions (yargs) {
     .option('address',
       { alias: 'a', type: 'string', describe: 'Account address', default: defaultAccount })
     .option('format',
-      { type: 'string', desc: 'json,csv,table', default: 'table' })
+      { type: 'string', desc: 'json,csv,table,org', default: 'table' })
     .option('noheader',
       { type: 'boolean', describe: 'do not output header', default: false })
     .option('usd',
