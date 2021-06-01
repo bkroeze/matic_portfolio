@@ -3,7 +3,7 @@ const formatDate = require('date-fns/format');
 const yargs = require('yargs');
 const Table = require('cli-table');
 const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
-
+const farmCommand = require('./lib/commands/farming');
 const { AaveService } = require('./lib/services/AaveService');
 
 const YMDDate = (dt) => {
@@ -270,5 +270,6 @@ yargs
     builder: rateOptions,
     handler: getRatesCommand
   })
+  .command(farmCommand)
   .help()
   .parse();
