@@ -9,6 +9,7 @@
   "private": false,
   "dependencies": {
     "@aave/protocol-js": "^2.7.2",
+    "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "cli-table": "^0.3.6",
     "csv-writer": "^1.6.0",
